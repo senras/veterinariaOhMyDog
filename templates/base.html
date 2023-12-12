@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		{% load %} {% load static %}
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+			crossorigin="anonymous"
+		/>
+		<link rel="stylesheet" type="text/css" href="{% static 'header_footer.css' %}" />
+		<link rel="icon" type="image/png" href="{% static 'Logo_icon.png' %}" />
+		{% block head %} {% endblock %}
+		<title>{% block title %}{% endblock %}</title>
+	</head>
+
+	<body>
+		<header>
+			<nav class="navbar navbar-expand-lg">
+				<div class="container-fluid">
+					<!-- elementos a la izquierda -->
+					<div>
+						<a class="navbar-brand" href="{% url 'users:index' %}"><img src="{% static 'Logo_con_titulo.png' %}" alt="Logo OhMyDog" /></a>
+						<button
+							class="navbar-toggler"
+							type="button"
+							data-bs-toggle="collapse"
+							data-bs-target="#navbarSupportedContent"
+							aria-controls="navbarSupportedContent"
+							aria-expanded="false"
+							aria-label="Toggle navigation"
+						>
+							<span class="navbar-toggler-icon">
+								<span class="custom-toggler-icon"></span>
+							</span>
+						</button>
+					</div>
+
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav me-auto mb-2 mb-lg-0 container-fluid">
+							<!--cosas a la izquierda -->
+							<li>
+								<div>
+									<ul>
+										<li class="nav-item"><a class="link active" aria-current="page" href="{% url 'users:index' %}">INICIO</a></li>
+										{% if user.is_authenticated %}
+										<li class="nav-item dropdown">
+											<a class="link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">ADOPCIONES</a>
+											<ul class="dropdown-menu">
+												<li class="link">
+													<a class="dropdown-item" href="{% url 'adopciones:mostrar_publicaciones' %}">Ver perros en adopción</a>
+												</li>
+												<li class="link">
+													<a class="dropdown-item" href="{% url 'adopciones:cargar_perro_adopcion' %}">Publicar perro en adopción</a>
+												</li>
+												<li class="link">
+													<a class="dropdown-item" href="{% url 'adopciones:mostrar_publicaciones_adopcion' %}">Mis perros en adopción</a>
+												</li>
+											</ul>
+										</li>
+
+										<li class="nav-item dropdown">
+											<a class="link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">ENCONTRADOS</a>
+											<ul class="dropdown-menu">
+												<li class="link">
+													<a class="dropdown-item" href="{% url 'encontrados:ver_encontrados' %}">Ver perros encontrados</a>
+												</li>
+												<li class="link">
+													<a class="dropdown-item" href="{% url 'encontrados:cargar_perro_encontrado' %}">Publicar perro encontrado</a>
+												</li>
+												<li class="link">
+													<a class="dropdown-item" href="{% url 'encontrados:ver_mis_encontrados' %}">Mis perros encontrados</a>
+												</li>
+											</ul>
+										</li>
+
+										<li class="nav-item dropdown">
+											<a class="link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">PERDIDOS</a>
+											<ul class="dropdown-menu">
+												<li class="link">
+													<a class="dropdown-item" href="{% url 'perdidos:ver_perdidos' %}">Ver perros perdidos</a>
+												</li>
+												<li class="link">
+													<a class="dropdown-item" href="{% url 'perdidos:cargar_perro_perdido' %}">Publicar perro perdido</a>
+												</li>
+												<li class="link">
+													<a class="dropdown-item" href="{% url 'perdidos:ver_mis_perdidos' %}">Mis perros perdidos</a>
+												</li>
+											</ul>
+										</li>
+
+										{% else %}
+										<li class="nav-item"><a class="link" href="{% url 'adopciones:mostrar_publicaciones' %}">ADOPCIONES</a></li>
+										<li class="nav-item"><a class="link" href="{% url 'encontrados:ver_encontrados' %}">ENCONTRADOS</a></li>
+										<li class="nav-item"><a class="link" href="{% url 'perdidos:ver_perdidos' %}">PERDIDOS</a></li>
+										{% endif %}
+										<li class="nav-item"><a class="link" href="{% url 'colectas:mostrar_colectas' %}">COLECTAS</a></li>
+										{% if user.es_veterinario %}
+										<li class="nav-item"><a class="link" href="{% url 'mapa:mostrar_mapa_veterinario' %}">MAPA</a></li>
+										{% else %}
+										<li class="nav-item"><a class="link" href="{% url 'mapa:mostrar_mapa_usuario' %}">MAPA</a></li>
+										{% endif %}
+									</ul>
+								</div>
+							</li>
+
+							<!--cosas a la derecha -->
+							<li class="ms-auto">
+								<div class="ms-auto">
+									<ul>
+										{% if user.is_authenticated %} {% if user.es_veterinario %}
+										<li>
+											<a class="link" href="{% url 'users:mostrar_usuarios' %}">CLIENTES</a>
+										</li>
+										{% endif %}
+										<li class="nav-item dropdown">
+											<a class="link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">TURNOS</a>
+											<ul class="dropdown-menu">
+												{% if user.es_veterinario %}
+												<li class="link">
+													<a class="dropdown-item" href="{% url 'turnos:mostrar_turnos' %}">Turnos activos</a>
+												</li>
+												<li class="link">
+													<a class="dropdown-item" href="{% url 'turnos:turnos_pendientes' %}">Turnos pendientes</a>
+												</li>
+												{% else %}
+												<li class="link">
+													<a class="dropdown-item" href="{% url 'turnos:solicitar_turno' %}">Solicitar turno</a>
+												</li>
+												<li class="link">
+													<a class="dropdown-item" href="{% url 'turnos:mis_turnos' %}">Mis turnos</a>
+												</li>
+												{% endif %}
+											</ul>
+										</li>
+										<li class="nav-item dropdown">
+											<a class="link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">BIENVENIDO</a>
+											<ul class="dropdown-menu">
+												<li class="link">
+													<a class="dropdown-item" href="{% url 'users:mi_perfil' %}">Mi Perfil</a>
+												</li>
+												<li class="link">
+													{% if user.es_veterinario %}
+													<!-- SOLO VETERINARIO -->
+													{% else %}
+													<!-- SOLO USUARIO COMUN -->
+													<a class="dropdown-item" href="{% url 'mascotas:ver_mis_perros' %}">Mis Perros</a>
+													{% endif %}
+												</li>
+												<li class="link">
+													<a class="dropdown-item" href="{% url 'users:logout' %}">Cerrar sesión</a>
+												</li>
+											</ul>
+										</li>
+										{% else %}
+										<li class="nav-item">
+											<a class="link" href="{% url 'users:recuperar_cuenta' %}">RECUPERAR CUENTA</a>
+										</li>
+										<li class="nav-item">
+											<a class="btn btn-login" href="{% url 'users:login' %}">INICIAR SESION</a>
+										</li>
+										{% endif %}
+									</ul>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</header>
+
+		<main class="w-75 mx-auto py-5">{% block content %} {% endblock %}</main>
+
+		<footer class="footer text-white py-4">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-4 col-md-6">
+						<h5>Información de contacto:</h5>
+						<p>Dirección: 123 Calle Principal, Ciudad</p>
+						<p>Teléfono: +123 456 789</p>
+						<p>Email: info@example.com</p>
+					</div>
+					<div class="col-lg-4 col-md-6">
+						<h5>Enlaces útiles</h5>
+						<ul class="list-unstyled">
+							<li><a href="#">Inicio</a></li>
+							<li><a href="#">Acerca de</a></li>
+							<li><a href="#">Servicios</a></li>
+							<li><a href="#">Contacto</a></li>
+						</ul>
+					</div>
+					<div class="col-lg-4">
+						<h5>Síguenos en redes sociales</h5>
+						<ul class="list-inline">
+							<li class="list-inline-item">
+								<a href="#"><i class="fab fa-facebook"></i></a>
+							</li>
+							<li class="list-inline-item">
+								<a href="#"><i class="fab fa-twitter"></i></a>
+							</li>
+							<li class="list-inline-item">
+								<a href="#"><i class="fab fa-instagram"></i></a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</footer>
+
+		<script
+			src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
+			integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
+			integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ"
+			crossorigin="anonymous"
+		></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+		<div class="contenido">
+			{% if messages %} {% for message in messages %} {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+			<script>
+				Swal.fire({
+					text: '{{ message }}',
+					icon: 'error',
+				})
+			</script>
+			{% endif %} {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+			<script>
+				Swal.fire({
+					text: '{{ message }}',
+					icon: 'success',
+				})
+			</script>
+			{% endif %} {% endfor %} {% endif %}
+		</div>
+	</body>
+</html>

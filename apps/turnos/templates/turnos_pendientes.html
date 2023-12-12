@@ -1,0 +1,281 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Turnos{% endblock %}
+{% block content %}
+
+
+
+<div class="container">
+    <div class="d-flex justify-content-between">
+        <h2>LISTADO DE TURNOS PENDIENTES</h2>
+
+<<<<<<< HEAD
+        <!-- de aca para abajo rompemos -->
+
+=======
+<!-- display filtrar -->
+>>>>>>> 743ba0537dd77fb7ee487ee1a9554741eb985348
+
+        <div>
+            <button class="my-btn" onclick="mostrarCampos()" id="btnMostrarCampos">Filtrar</button>
+        </div>
+
+        <div id="camposFecha" style="display: none;">
+            <div>
+                <label for="fechaInicio">Fecha inicio:</label>
+                <input type="date" class="mb-3" id="fechaInicio" name="fechaInicio">
+            </div>
+            <div>
+                <labe for="fechaFin">Fecha fin:</label>
+                    <input type="date" class="mb-3" id="fechaFin" name="fechaFin">
+            </div>
+            <button class="my-btn" id="btnEnviarFechas">Filtrar</button>
+        </div>
+
+    </div>
+<<<<<<< HEAD
+    {% csrf_token %}
+
+    <script>
+
+        var csrfToken = document.getElementsByName( 'csrfmiddlewaretoken' )[0].value;
+
+        function mostrarCampos() {
+            var btnMostrarCampos = document.getElementById( "btnMostrarCampos" );
+            var camposFecha = document.getElementById( "camposFecha" );
+
+            btnMostrarCampos.style.display = "none";
+            camposFecha.style.display = "block";
+        }
+
+        document.getElementById( "btnMostrarCampos" ).addEventListener( "click", function () {
+            var camposFecha = document.getElementById( "camposFecha" );
+            camposFecha.style.display = "block";
+        } );
+
+        document.getElementById( "btnEnviarFechas" ).addEventListener( "click", function () {
+            var fechaInicio = document.getElementById( "fechaInicio" ).value;
+            var fechaFin = document.getElementById( "fechaFin" ).value;
+
+            var form = document.createElement( "form" );
+            form.method = "POST";
+            form.action = "/turnos/turnos_pendientes/";
+
+            var csrfInput = document.createElement( "input" );
+            csrfInput.type = "hidden";
+            csrfInput.name = "csrfmiddlewaretoken";
+            csrfInput.value = csrfToken;
+            form.appendChild( csrfInput );
+
+            var fechaInicioInput = document.createElement( "input" );
+            fechaInicioInput.type = "hidden";
+            fechaInicioInput.name = "fechaInicio";
+            fechaInicioInput.value = fechaInicio;
+            form.appendChild( fechaInicioInput );
+
+            var fechaFinInput = document.createElement( "input" );
+            fechaFinInput.type = "hidden";
+            fechaFinInput.name = "fechaFin";
+            fechaFinInput.value = fechaFin;
+            form.appendChild( fechaFinInput );
+
+            document.body.appendChild( form );
+            form.submit();
+        } );
+    </script>
+
+
+    <!-- de aca para arriba rompemos -->
+=======
+
+    <!-- script filtrar -->
+
+    <script>
+
+        function mostrarCampos() {
+            var btnMostrarCampos = document.getElementById("btnMostrarCampos");
+            var camposFecha = document.getElementById("camposFecha");
+            
+            btnMostrarCampos.style.display = "none";
+            camposFecha.style.display = "block";
+          }
+    
+        document.getElementById("btnMostrarCampos").addEventListener("click", function() {
+            var camposFecha = document.getElementById("camposFecha");
+            camposFecha.style.display = "block";
+          });
+          
+          document.getElementById("btnEnviarFechas").addEventListener("click", function() {
+            var fechaInicio = document.getElementById("fechaInicio").value;
+            var fechaFin = document.getElementById("fechaFin").value;
+              
+            var form = document.createElement("form");
+            form.method = "POST";
+            form.action = "/turnos/turnos_pendientes/";
+            
+            var csrfInput = document.createElement("input");
+            csrfInput.type = "hidden";
+            csrfInput.name = "csrfmiddlewaretoken";
+            csrfInput.value = csrfToken;
+            form.appendChild(csrfInput);
+            
+            var fechaInicioInput = document.createElement("input");
+            fechaInicioInput.type = "hidden";
+            fechaInicioInput.name = "fechaInicio";
+            fechaInicioInput.value = fechaInicio;
+            form.appendChild(fechaInicioInput);
+            
+            var fechaFinInput = document.createElement("input");
+            fechaFinInput.type = "hidden";
+            fechaFinInput.name = "fechaFin";
+            fechaFinInput.value = fechaFin;
+            form.appendChild(fechaFinInput);
+    
+            document.body.appendChild(form);
+            form.submit();
+          });
+        </script>
+
+<!-- fin script -->
+>>>>>>> 743ba0537dd77fb7ee487ee1a9554741eb985348
+
+    <table class="table">
+        <tbody>
+            {% if page_obj %}
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Turno</th>
+                    <th>Mail cliente</th>
+                    <th>Mascota</th>
+                    <th>Motivo</th>
+                    <th>Descripcion</th>
+                </tr>
+<<<<<<< HEAD
+            </thead>
+
+            {% for Turno in page_obj %}
+            {% csrf_token %}
+            <tr>
+                <td>{{ Turno.Fecha }}</td>
+                {% if Turno.Franja_Horaria == "M" %}
+                <td> Mañana </td>
+                {% else %}
+                <td> Tarde </td>
+                {% endif %}
+                <td>{{ Turno.id_usuario }}</td>
+                <td>{{ Turno.Descripcion }}</td>
+                <td><a class="btn" href="{% url 'turnos:aceptar_turno' Turno.id %}">Aceptar</a></td>
+                <td><a class="btn" href="{% url 'turnos:rechazar_turno' Turno.id %}">Rechazar</a></td>
+            </tr>
+            {% endfor %}
+=======
+                </thead>
+        
+                {% for Turno in page_obj %}
+                {% csrf_token %}
+                <tr>
+                    <td>{{ Turno.Fecha }}</td>
+                    {% if Turno.Franja_Horaria == "M" %}
+                        <td> Mañana </td>
+                    {% else %}
+                        <td> Tarde </td>
+                    {% endif %}
+                    <td>{{ Turno.id_usuario }}</td> 
+                    {% if Turno.id_perro == null %}
+                    <td>Otro perro</td>
+                    {% else %}
+                    <td>{{ Turno.id_perro }}</td>
+                    {% endif %}
+                    <td>{{ Turno.MotivosConsulta }}</td>     
+                    <td>{{ Turno.Descripcion }}</td>
+                    <td><a class="btn" href="{% url 'turnos:aceptar_turno' Turno.id %}">Aceptar</a></td>
+                    
+                    <td>
+                        <button class="btn" onclick="mostrarCampo()" id="btnMostrarCampo" data-id="{{ Turno.id }}">Rechazar</button>
+                        <div id="campoMotivo" style="display: none;">
+                                <form id="form-id" data-turno-id="{{ Turno.id }}">
+                                    <label class="inline-block mb-2">Motivo:</label>
+                                    <input type="text" class="inline-block mb-2"  id="motivoRechazo-{{ Turno.id }}" name="motivoRechazo" size="10"><br>
+                                    <button class="btn" onclick="enviarRechazo()" id="enviarRechazo" data-url="{% url 'turnos:rechazar_turno' Turno.id %}">Enviar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </td>
+                       
+                    <!--<td><a class="btn" href="{% url 'turnos:rechazar_turno' Turno.id %}">rechazar antiguio</a></td>-->
+
+                </tr>
+
+                {% endfor %}
+>>>>>>> 743ba0537dd77fb7ee487ee1a9554741eb985348
+            {% else %}
+            <tr>
+                <td colspan="4">No hay solicitudes de turnos pendientes</td>
+            </tr>
+            {% endif %}
+
+        </tbody>
+    </table>
+
+    {% if mostrar %}
+    <div class="pagination mb-4">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; Primera</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+            {% endif %}
+
+            <span class="current-page">{{ page_obj.number }}</span>
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    {% endif %}
+</div>
+
+
+{% csrf_token %}
+<!-- script motivo rechazo -->
+<script>
+
+    var csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+
+    function mostrarCampo() {
+        var btnMostrarCampo = document.getElementById("btnMostrarCampo");
+        var campoMotivo = document.getElementById('campoMotivo');
+        btnMostrarCampo.style.display = "none";
+        campoMotivo.style.display = "block";
+
+        document.getElementById("enviarRechazo").addEventListener("click", enviarRechazo);
+
+    }
+    function enviarRechazo(event) {
+        event.preventDefault();
+    
+        var form = event.target.closest("form");
+        var motivoCampo = form.querySelector("input[name='motivoRechazo']").value;
+        var turnoId = form.dataset.turnoId;
+    
+        form.method = "POST";
+        form.action = "/turnos/rechazar_turno/" + turnoId + "/";
+    
+        var csrfInput = document.createElement("input");
+        csrfInput.type = "hidden";
+        csrfInput.name = "csrfmiddlewaretoken";
+        csrfInput.value = csrfToken;
+        form.appendChild(csrfInput);
+    
+        var motivoInput = document.createElement("input");
+        motivoInput.type = "hidden";
+        motivoInput.name = "motivoRechazo";
+        motivoInput.value = motivoCampo;
+        form.appendChild(motivoInput);
+    
+        form.submit();
+    }
+</script>
+{% endblock %}

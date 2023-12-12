@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load %}
+{% load static %}
+{% block title %}Colectas | Donación exitosa {% endblock %}
+
+{% block content %}
+
+<div class="w-50 my-3 p-3 mx-auto bg-gray-100 rounded">
+    <div class="mb-4">
+        <h2>Donación</h3>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <p class="my-4"><b>IMPORTANTE:</b> Por favor ingrese el monto que desea donar en la siguiente casilla:</p>
+        <div class="mb-3">
+            <label for="monto" class="inline-block mb-2">Monto:</label><br> {{ form.monto }}
+        </div>
+        {% if not user.is_authenticated %}
+        
+        <div class="mb-3">
+            <label for="mail" class="inline-block mb-2">Mail:</label><br> {{ form.mail }}
+        </div>
+        {% endif %}
+
+        {% if form.errors or form.non_field_errors %}
+        <div class="mb-3 p-1 bg-danger rounded">
+            {% for field in form %}
+            {{ field.errors }}
+            {% endfor %}
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+        <br>
+        <button type="submit" class="my-btn">Donar</button>
+    </form>
+</div>
+
+{% endblock %}

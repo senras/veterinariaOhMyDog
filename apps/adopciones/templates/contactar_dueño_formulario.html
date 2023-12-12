@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contactar dueño{% endblock %}
+
+{% block content %}
+<div class="w-50 my-3 p-3 mx-auto bg-gray-100 rounded">
+    <h2>Contactar</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p}}
+        <button class="my-btn" type="submit">Enviar</button>
+    </form>
+</div>
+{% endblock %}

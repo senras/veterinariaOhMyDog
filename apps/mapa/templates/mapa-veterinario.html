@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+	integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+	integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<link rel="stylesheet" type="text/css" href="{% static 'header_footer.css' %}">
+{% endblock %}
+{% block title %}Mapa{% endblock %}
+{% block content %}
+
+<div class="d-flex w-100 my-3 p-3 mx-auto bg-gray-100 rounded justify-content-around align-items-center">
+	<div class="" id="registrar-pc">
+		<div class="mb-4">
+			<h5 class="text-center"><b>Cargar Paseador/Cuidador</b></h5>
+		</div>
+		<form action="." method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="row">
+				<div class="col-md-6">
+					<div class="mb-3">
+						<label class="inline-block mb-2" for="id_nombre">Nombre</label><br>
+						{{ form.nombre }}<br>
+					</div>
+					<div class="mb-3">
+						<label class="inline-block mb-2" for="id_apellido">Apellido</label><br>
+						{{ form.apellido }}<br>
+					</div>
+					<div class="mb-3">
+						<label class="inline-block mb-2" for="id_telefono">Teléfono</label><br>
+						{{ form.telefono }}<br>
+					</div>
+					<div class="mb-3">
+						<label class="inline-block mb-2" for="id_mail">Email</label><br>
+						{{ form.mail }}<br>
+					</div>
+
+				</div>
+				<div class="col-md-6">
+					<div class="mb-3">
+						<label class="inline-block mb-2" for="id_latitud">Latitud</label><br>
+						{{ form.latitud }}<br>
+					</div>
+					<div class="mb-3">
+						<label class="inline-block mb-2" for="id_longitud">Longitud</label><br>
+						{{ form.longitud }}<br>
+					</div>
+					<div class="mb-3">
+						<label class="inline-block mb-2" for="id_descripcion">Descripción</label><br>
+						{{ form.descripcion }}<br>
+					</div>
+					<div class="mb-3">
+						<label class="inline-block mb-2" for="id_tipo_servicio">Tipo de servicio</label><br>
+						{{ form.tipo_servicio }}<br>
+					</div>
+				</div>
+				<button type="submit" class="my-btn w-25 m-3">Agregar</button>
+				{{ form.non_field_errors }}
+				{% if form.errors or form.non_field_errors %}
+				<div class="mb-3 p-1 bg-danger rounded">
+					{% for field in form %}
+					{{ field.errors }}
+					{% endfor %}
+					{{ form.non_field_errors }}
+				</div>
+				{% endif %}
+				<br>
+			</div>
+		</form>
+	</div>
+	<div id="map" style="width: 400px; height: 400px"></div>
+</div>
+{{ ubicaciones|json_script:"ubicaciones-json" }}
+
+<script>
+	document.addEventListener( 'DOMContentLoaded', () => {
+		let map = L.map( 'map' )
+		map.setView( [-34.92135, -57.95443], 15 )
+		L.tileLayer( 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+		} ).addTo( map )
+		map.on( "click", function ( e ) {
+			latitud = document.getElementById( "id_latitud" )
+			longitud = document.getElementById( "id_longitud" )
+			latitud.value = e.latlng.lat
+			longitud.value = e.latlng.lng
+		} );
+		let ubicaciones = JSON.parse( document.getElementById( 'ubicaciones-json' ).textContent )
+
+		ubicaciones.forEach( ( ubicacion ) => {
+			let mp = new L.Marker( [ubicacion.latitud, ubicacion.longitud] )
+			mp.addTo( map )
+			if ( ubicacion.disponible ) {
+				mp.bindPopup( '<div class="d-flex flex-column"><div class="d-flex mb-2 justify-content-start">' +
+					'<a href="../borrar_paseador_cuidador/' + ubicacion.id + '"><img src="{% static "delete.png" %}" width="20" alt="Borrar"></a>' +
+					'</div>' +
+					'<div class="mb-3 text-center"><b>' + "(" + ubicacion.tipo_servicio + ") " + ubicacion.nombre + " " + ubicacion.apellido + '</b></div>' +
+					'<div class="mb-3 text-center"> ' + ubicacion.descripcion + ' </div>' +
+					'<a class="btn text-white px-2 py-1 mb-1 bg-danger" href="../marcar_no_disponible/' + ubicacion.id + '">Marcar no disponible</a>'
+				).openPopup()
+			} else {
+				mp.bindPopup( '<div class="d-flex flex-column"><div class="d-flex mb-2 justify-content-start">' +
+					'<a href="../borrar_paseador_cuidador/' + ubicacion.id + '"><img src="{% static "delete.png" %}" width="20" alt="Borrar"></a>' +
+					'</div>' +
+					'<div class="mb-3 text-center"><b>' + "(" + ubicacion.tipo_servicio + ") " + ubicacion.nombre + " " + ubicacion.apellido + '</b></div>' +
+					'<div class="mb-3 text-center"> ' + ubicacion.descripcion + ' </div>' +
+					'<a class="btn text-white px-2 py-1 mb-1 bg-primary" href="../marcar_disponible/' + ubicacion.id + '">Marcar disponible</a>'
+				).openPopup()
+			}
+
+		} )
+	} )
+</script>
+{% endblock %}

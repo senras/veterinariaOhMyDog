@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}¡Oh My Dog!{% endblock %}
+
+{% block content %}
+<a href={% url 'mascotas:ver_perros' perro.id_usuario_id %} class="btn btn-secondary mt-4">Volver</a>
+<h3 class="mt-4">Historia Clínica de {{ perro.nombre }}</h3>
+{% if user.es_veterinario %}
+<div class="container d-flex justify-content-end">
+    {% if not perro.castrado %}
+    <a class="my-btn text-decoration-none" href="{% url 'mascotas:registrar_castracion' perro.id %}">Registrar
+        castracion</a>
+    {% endif %}
+    <a class="my-btn text-decoration-none" href="{% url 'mascotas:agregar_historia_clinica' perro.id %}">Agregar
+        atención</a>
+</div>
+{% endif %}
+
+<div class="container">
+    <table class="table mt-4">
+        <tbody>
+            {% if page_obj %}
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Peso (kg)</th>
+                    <th>Descripción</th>
+                    <th>Diagnóstico</th>
+                </tr>
+            </thead>
+            {% for registro in page_obj %}
+            <tr>
+                <td>{{ registro.fecha|date:"d/m/Y" }}</td>
+                <td>{{ registro.peso }}</td>
+                <td>{{ registro.descripcion }}</td>
+                <td>{{ registro.diagnostico }}</td>
+                {% if user.es_veterinario %}
+                <td><a method="post" class="my-btn"
+                        href="{% url 'mascotas:borrar_historia' perro.id registro.id %}">Borrar</a></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="4">No tiene atenciones registradas.</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+
+    {% if mostrar %}
+    <div class="pagination mb-4">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; Primera</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+            {% endif %}
+
+            <span class="current-page">{{ page_obj.number }}</span>
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

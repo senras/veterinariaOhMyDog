@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}¡Oh My Dog! | Inicio {% endblock %}
+
+{% block content %}
+<div class="w-50 mx-auto bg-gray-100 rounded p-3" style="min-height:42vh">
+    {% if user.is_authenticated %}
+    <div class="text-center">
+        <h1>Bienvenido, {{ user.nombre }}!</h1>
+    </div>
+    {% else %}
+    <div class="text-center">
+        <h3>Aún no ha iniciado sesión</h3>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

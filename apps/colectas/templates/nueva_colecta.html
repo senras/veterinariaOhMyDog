@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Nueva colecta{% endblock %}
+
+{% block content %}
+
+<div class="w-50 my-3 p-3 mx-auto bg-gray-100 rounded">
+    <h3>Nueva colecta de fondos</h3>
+    <form action="{% url 'colectas:nueva_colecta' %}" method="post">
+        {% csrf_token %}
+        {% for campo in nueva_colecta %}
+            <div class="form-group mb-2">
+                <label for="{{ campo.name }}">{{ campo.label }}</label>
+                {{ campo }}
+                {% if campo.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in campo.errors %}
+                            <p class="mb-0">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <br>
+        <center><button type="submit" class="py-2 px-4 text-lg main-color rounded text-white border-0">Publicar</button></center>
+    </form>
+</div>
+
+{% endblock %}

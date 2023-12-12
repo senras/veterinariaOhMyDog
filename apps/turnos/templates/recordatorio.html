@@ -1,0 +1,4 @@
+{% block content %}
+se notifica que el dia {{ turno.Fecha.day }}/{{ turno.Fecha.month }} a la {%if Turno.Franja_Horaria == "M" %}mañana{% else %}tarde{% endif %} tiene registrado una cita con el veterinario.
+
+{% endblock %}

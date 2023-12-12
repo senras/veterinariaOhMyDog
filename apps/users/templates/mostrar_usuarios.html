@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Usuarios{% endblock %}
+{% block content %}
+
+
+
+<div class="container">
+    <div class="mb-3 d-flex justify-content-between">
+        <h2>LISTADO DE CLIENTES</h2>
+        <a class="btn" href="{% url 'users:crear_cliente' %}">CREAR CLIENTE</a></li>
+    </div>
+    <table class="table">
+        <tbody>
+            {% if page_obj %}
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Mail</th>
+                    <th>Teléfono</th>
+                    <th>Dirección</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            {% for usuario in page_obj %}
+            <tr>
+                <td>{{ usuario.nombre }} {{ usuario.apellido }}</td>
+                <td>{{ usuario.email }}</td>
+                <td>{{ usuario.telefono }}</td>
+                <td>{{ usuario.direccion }}</td>
+                <div class="d-flex justify-content-around">
+                    <td><a class="btn" href="{% url 'mascotas:ver_perros' usuario.id %}">Ver mascotas</a></td>
+                    <td><a class="btn" href="{% url 'mascotas:registrar_mascota' usuario.id %}">Agregar mascota</a></td>
+                </div>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="4">No hay clientes registrados</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    {% if mostrar %}
+    <div class="pagination mb-4">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; Primera</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+            {% endif %}
+
+            <span class="current-page">{{ page_obj.number }}</span>
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

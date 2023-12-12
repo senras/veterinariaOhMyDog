@@ -1,0 +1,17 @@
+__pycache__/
+apps/adopciones/__pycache__/
+apps/colectas/__pycache__/
+apps/encontrados/__pycache__/
+apps/mascotas/__pycache__/
+apps/perdidos/__pycache__/
+apps/turnos/__pycache__/
+apps/users/__pycache__/
+apps/adopciones/migrations/
+apps/colectas/migrations/
+apps/encontrados/migrations/
+apps/mascotas/migrations/
+apps/perdidos/migrations/
+apps/turnos/migrations/
+apps/users/migrations/
+
+db.sqlite3

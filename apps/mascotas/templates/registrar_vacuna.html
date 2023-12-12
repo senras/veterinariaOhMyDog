@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Registrar Vacunacion{% endblock %}
+
+{% block content %}
+<div class="w-50 my-2 mx-auto p-4 bg-gray-100 rounded">
+    <h1 class="mb-5">Registrar vacunacion</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_fecha" class="inline-block mb-2">Fecha:</label><br> {{ form.fecha }}
+        </div>
+        <div class="mb-3">
+            <label for="id_marca" class="inline-block mb-2">Marca:</label><br> {{ form.marca }}
+        </div>
+        <div class="mb-3">
+            <label for="id_tipo" class="inline-block mb-2">Tipo de vacuna:</label><br> {{ form.tipo }}
+        </div>
+        <div class="mb-3">
+            <label for="id_lote" class="inline-block mb-2">Lote:</label><br> {{ form.lote }}
+        </div>
+        <div class="mb-3">
+            <label for="id_numero_dosis" class="inline-block mb-2">Número de dosis:</label><br> {{ form.numero_dosis }}
+        </div>
+        {% if form.errors or form.non_field_errors %}
+        <div class="mb-3 p-5 rounded">
+            {% for field in form %}
+            {{ field.errors }}
+            {% endfor %}
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+        <button class="my-btn">Aceptar</button>
+    </form>
+
+
+</div>
+{% endblock %}

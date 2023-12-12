@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load %}
+{% load static %}
+{% block title %}Colectas{% endblock %}
+
+{% block content %}
+
+<div>
+    <div class=" mb-2 d-flex justify-content-between">
+        <h2>Colectas</h2>
+        {% if user.es_veterinario %}
+        <a href="{% url 'colectas:nueva_colecta' %}"><button class="my-btn">Crear colecta</button></a>
+        {% endif %}
+    </div>
+
+
+    <div class="mx-auto bg-gray-100 rounded p-3">
+        <div class="container">
+            <div class="row mb-4">
+                {% if not page_obj %}
+                <p>Aún no hay colectas disponibles</p>
+                {% else %}
+
+                {% for colecta in page_obj %}
+                <div class="col-4">
+                    <div class="card">
+                        {% if user.es_veterinario %}
+                        <div class="d-flex justify-content-end">
+                            <button class="btn-detalle-colecta border-0" data-colecta-id="{{ colecta.id }}"><img
+                                    src="{% static 'info.png' %}" width="40" alt="Información"></button>
+                            <button class="btn-borrar-colecta border-0" data-colecta-id="{{ colecta.id }}"><img
+                                    src="{% static 'delete.png' %}" width="40" alt="Borrar"></button>
+                        </div>
+                        {% endif %}
+                        <h4 class="card-title mt-1 mx-2">{{ colecta.titulo }}</h4>
+                        <h5 class="card-text mx-2">{{ colecta.descripcion }}</h5>
+                        <br>
+                        <p class="card-text mx-2">Monto meta: ${{ colecta.monto_meta }}</p>
+
+                        <div class=" progress mx-2">
+                            {% widthratio colecta.monto_recaudado colecta.monto_meta 100 as porcentaje_completado %}
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ porcentaje_completado }};" aria-valuenow="{{ colecta.monto_recaudado }}" aria-valuemin="0" aria-valuemax="{{ colecta.monto_meta }}"> {{ colecta.monto_recaudado }} </div>
+                        </div>
+                        
+                        <p class="card-text mx-2">Monto recaudado: ${{ colecta.monto_recaudado }}</p>
+                        <p class="card-text mx-2"> Fecha límite: {{ colecta.fecha_limite }}</p>
+                        {% if not user.es_veterinario %}
+                        {% if colecta.concluida %}
+                        <button class="py-2 px-4 text-lg btn rounded border-0" disabled>¡Concluida!</button>
+                        {%else %}
+                        <a href="{% url 'colectas:pantalla_donacion' colecta.id %}"
+                            class="my-btn text-decoration-none">Donar</a>
+                        {% endif %}
+                        {% endif %}
+
+                        {% if user.es_veterinario %}
+                        <br>
+                        {% if colecta.concluida %}
+                        <a class="my-btn text-center text-decoration-none" style="background-color:#17A2B8;"
+                            href="{% url 'colectas:desmarcar_concluida' colecta.id %}">Desmarcar concluida</a>
+                        {% else %}
+                        <a class="my-btn text-center text-decoration-none"
+                            href="{% url 'colectas:marcar_concluida' colecta.id %}">Marcar concluida</a>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                {% if forloop.counter|divisibleby:3 or forloop.last %}
+            </div>
+            <div class="row mb-4">
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+                <script>
+                    document.querySelectorAll( '.btn-borrar-colecta' ).forEach( function ( borrar_colecta ) {
+                        borrar_colecta.addEventListener( 'click', function () {
+                            var colectaId = this.getAttribute( 'data-colecta-id' );
+                            if ( confirm( '¿Estás seguro de borrar esta colecta?' ) ) {
+                                window.location.href = "{% url 'colectas:borrar_colecta' colecta_id=0 %}".replace( '0', colectaId );
+                            }
+                        } );
+                    } );
+                    document.querySelectorAll( '.btn-detalle-colecta' ).forEach( ( btn ) => {
+                        btn.addEventListener( 'click', function () {
+                            const colectaId = this.getAttribute( 'data-colecta-id' );
+                            window.location.href = "{% url 'colectas:mostrar_detalle_colecta' colecta_id=0 %}".replace( '0', colectaId );
+                        } );
+                    } );
+                </script>
+            </div>
+
+            {% if mostrar %}
+            <div class="pagination mb-4">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; Primera</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                    {% endif %}
+
+                    <span class="current-page">{{ page_obj.number }}</span>
+
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap-theme.min.css' %}">
+{% load static %}
+<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>

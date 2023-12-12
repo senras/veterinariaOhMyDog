@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Usuarios{% endblock %}
+{% block content %}
+
+
+
+<div class="container">
+    <div class="d-flex justify-content-between">
+        <h2>LISTADO DE TURNOS ACTIVOS</h2>
+
+        <div>
+            <button class="my-btn" onclick="mostrarCampos()" id="btnMostrarCampos">Filtrar</button>
+        </div>
+
+        <div id="camposFecha" style="display: none;">
+            <div>
+                <label for="fechaInicio">Fecha inicio:</label>
+                <input type="date" class="mb-3" id="fechaInicio" name="fechaInicio">
+            </div>
+            <div>
+                <labe for="fechaFin">Fecha fin:</label>
+                    <input type="date" class="mb-3" id="fechaFin" name="fechaFin">
+            </div>
+            <button class="my-btn" id="btnEnviarFechas">Filtrar</button>
+        </div>
+
+    </div>
+    {% csrf_token %}
+
+    <script>
+
+        var csrfToken = document.getElementsByName( 'csrfmiddlewaretoken' )[0].value;
+
+        function mostrarCampos() {
+            var btnMostrarCampos = document.getElementById( "btnMostrarCampos" );
+            var camposFecha = document.getElementById( "camposFecha" );
+
+            btnMostrarCampos.style.display = "none";
+            camposFecha.style.display = "block";
+        }
+
+        document.getElementById( "btnMostrarCampos" ).addEventListener( "click", function () {
+            var camposFecha = document.getElementById( "camposFecha" );
+            camposFecha.style.display = "block";
+        } );
+
+        document.getElementById( "btnEnviarFechas" ).addEventListener( "click", function () {
+            var fechaInicio = document.getElementById( "fechaInicio" ).value;
+            var fechaFin = document.getElementById( "fechaFin" ).value;
+
+            var form = document.createElement( "form" );
+            form.method = "POST";
+            form.action = "/turnos/mostrar_turnos/";
+
+            var csrfInput = document.createElement( "input" );
+            csrfInput.type = "hidden";
+            csrfInput.name = "csrfmiddlewaretoken";
+            csrfInput.value = csrfToken;
+            form.appendChild( csrfInput );
+
+            var fechaInicioInput = document.createElement( "input" );
+            fechaInicioInput.type = "hidden";
+            fechaInicioInput.name = "fechaInicio";
+            fechaInicioInput.value = fechaInicio;
+            form.appendChild( fechaInicioInput );
+
+            var fechaFinInput = document.createElement( "input" );
+            fechaFinInput.type = "hidden";
+            fechaFinInput.name = "fechaFin";
+            fechaFinInput.value = fechaFin;
+            form.appendChild( fechaFinInput );
+
+            document.body.appendChild( form );
+            form.submit();
+        } );
+
+    </script>
+
+
+    <table class="table">
+        <tbody>
+            {% if page_obj %}
+            <thead>
+<<<<<<< HEAD
+                <tr>
+                    <th>Fecha</th>
+                    <th>Turno</th>
+                    <th>Mail cliente</th>
+                    <th>Descripcion</th>
+                    <th></th>
+                </tr>
+=======
+            <tr>
+                <th>Fecha</th>
+                <th>Turno</th>
+                <th>Mail cliente</th>
+                <th>Motivo</th>
+                <th>Mascota</th>
+                <th>Descripcion</th>
+                <th></th>
+            </tr>
+>>>>>>> 743ba0537dd77fb7ee487ee1a9554741eb985348
+            </thead>
+
+            {% for Turno in page_obj %}
+
+            {% csrf_token %}
+            <tr>
+                <td>{{ Turno.Fecha }}</td>
+                {% if Turno.Franja_Horaria == "M" %}
+<<<<<<< HEAD
+                <td> mañana </td>
+                {% else %}
+                <td> tarde </td>
+=======
+                    <td> Mañana </td>
+                {% else %}
+                    <td> Tarde </td>
+>>>>>>> 743ba0537dd77fb7ee487ee1a9554741eb985348
+                {% endif %}
+                <td>{{ Turno.id_usuario }}</td>
+                <td>{{ Turno.MotivosConsulta }}</td>                
+                {% if Turno.id_perro == null %}
+                <td>Otro perro</td>
+                {% else %}
+                <td>{{ Turno.id_perro }}</td>
+                {% endif %}     
+                <td>{{ Turno.Descripcion }}</td>
+
+                {% if Turno.id_perro == null %}
+                    <td><a class="btn" href="{% url 'mascotas:registrar_mascota' Turno.id_usuario_id %}">Registrar perro</a></td>
+                {% else %}
+                    {% if Turno.MotivosConsulta == "Vacunar" %}
+                        <td><a class="btn" href="{% url 'mascotas:registrar_vacuna' Turno.id_perro_id %}">Registrar vacuna</a></td>
+                    {% else %}
+                        {% if Turno.MotivosConsulta == "Castrar" %}
+                            <td><a class="btn" href="{% url 'mascotas:registrar_castracion' Turno.id_perro_id %}" >Registrar castración</a></td>
+                        {% else %}
+                            <td><a class="btn" href="{% url 'mascotas:agregar_historia_clinica' Turno.id_perro_id %}">Registrar atención</a></td>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="4">No hay turnos activos</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    {% if mostrar %}
+    <div class="pagination mb-4">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; Primera</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+            {% endif %}
+
+            <span class="current-page">{{ page_obj.number }}</span>
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    {% endif %}
+
+</div>
+{% if request.method == 'POST' %}
+<a href="{% url 'turnos:mostrar_turnos' %}" class="btn">volver</a>
+{% endif %}
+{% endblock %}

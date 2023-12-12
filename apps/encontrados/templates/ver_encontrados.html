@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load template_filters %}
+{% block title %}Perros Encontrados{% endblock %}
+
+{% block content %}
+
+<div>
+    <div class=" mb-4 d-flex justify-content-between">
+        <h2 class="">Perros encontrados</h2>
+        {% if user.is_authenticated %}
+        <a class="my-btn text-decoration-none" href="{% url 'encontrados:cargar_perro_encontrado' %}">Publicar perro
+            encontrado</a>
+        {% endif %}
+    </div>
+    <div class="mx-auto bg-gray-100 rounded p-3">
+        <div class="container text-center">
+            <div class="row mb-4">
+                {% if not page_obj %}
+                <p class="card-title"> No hay perros encontrados publicados</p>
+                {% else %}
+                {% for publicacion in page_obj %}
+                <div class="col-4">
+                    <div class="card">
+                        <h4 class="card-title mt-1">{{ publicacion.titulo }}</h4>
+                        <div class="mb-3">{% if publicacion.imagen %}
+                            <img width="300" height="300" src="{{publicacion.imagen.url}}">
+                            {% endif %}
+                        </div>
+                        <h5 class="card-text mb-3">Descripción:{{ publicacion.descripcion }}</h5>
+                        <p class="card-text">Zona: {{ publicacion.zona }}</p>
+                        <p class="card-text">Raza: {% if publicacion.raza %}
+                            {{ publicacion.raza }}
+                            {% else %}
+                            sin definir
+                            {% endif %}
+                        </p>
+                        <p class="card-text">Color: {% if publicacion.color %}
+                            {{ publicacion.color }}
+                            {% else %}
+                            sin definir
+                            {% endif %}
+                        </p>
+                        <p class="card-text">Sexo: {% if publicacion.sexo %}
+                            {{ publicacion.sexo }}
+                            {% else %}
+                            sin definir
+                            {% endif %}
+                        </p>
+                        <p class="card-text">Edad: {{ publicacion.rango_edad }}</p>
+                        <p class="card-text">Tamaño: {{ publicacion.tamaño }}</p>
+
+                        {% if publicacion.ubicado %}
+                        <button class="my-btn" disabled>¡Ubicado!</button>
+                        {% else %}
+                        {% if user.is_authenticated %}
+                        {% if publicacion.mails_contactados|get:user.email %}
+                        <button class="my-btn" disabled>Ya contactado</button>
+                        {% else %}
+                        <form method="post"
+                            action="{% url 'encontrados:contactar_dueño' publicacion.usuario.id publicacion.id %}">
+                            {% csrf_token %}
+                            <button class="my-btn" type="submit">Contactar</button>
+                        </form>
+                        {% endif %}
+                        {% else %}
+                        <a class="my-btn text-decoration-none"
+                            href="{% url 'encontrados:contactar_dueño_formulario' publicacion.usuario.id publicacion.id %}">Contactar</a>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            {% if mostrar %}
+            <div class="pagination mb-4">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; Primera</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                    {% endif %}
+
+                    <span class="current-page">{{ page_obj.number }}</span>
+
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

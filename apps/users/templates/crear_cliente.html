@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}
+¡Oh My Dog! | Registrarse
+{% endblock %}
+
+{% block content %}
+<div class="w-50 my-3 p-3 mx-auto bg-gray-100 rounded">
+  <h1>Crear Cliente</h1>
+  <form action="." method="post">
+    {% csrf_token %}
+    {% if form.errors or form.non_field_errors %}
+    <div class="mb-3 p-1 bg-danger rounded">
+      {% for field in form %}
+      {{ field.errors }}
+      {% endfor %}
+      {{ form.non_field_errors }}
+    </div>
+    {% endif %}
+    <div class="mb-3">
+      <label for="id_email" class="inline-block mb-2">Correo electrónico:</label><br>
+      {{ form.email }}
+    </div>
+    <div class="mb-3">
+      <label for="id_password1" class="inline-block mb-2">Contraseña:</label><br>
+      {{ form.password1 }}
+    </div>
+    <div class="mb-3">
+      <label for="id_password2" class="inline-block mb-2">Repetir contraseña:</label><br>
+      {{ form.password2 }}
+    </div>
+    <div class="mb-3">
+      <label for="id_nombre" class="inline-block mb-2">Nombre(s):</label><br>
+      {{ form.nombre }}
+    </div>
+    <div class="mb-3">
+      <label for="id_apellido" class="inline-block mb-2">Apellido(s):</label><br>
+      {{ form.apellido }}
+    </div>
+    <div class="mb-3">
+      <label for="id_direccion" class="inline-block mb-2">Dirección:</label><br>
+      {{ form.direccion }}
+    </div>
+    <div class="mb-3">
+      <label for="id_telefono" class="inline-block mb-2">Teléfono:</label><br>
+      {{ form.telefono }}
+    </div>
+
+    <button class="py-2 px-4 text-lg main-color rounded text-white border-0">Aceptar</button>
+
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Detalle de colecta{% endblock %}
+
+{% block content %}
+
+<div class="w-50 my-3 p-3 mx-auto bg-gray-100 rounded">
+    <h3>Detalle</h3>
+    <table class="table">
+        <tbody>
+            {% if page_obj %}
+            <thead>
+                <tr>
+                    <th>Donador</th>
+                    <th>Monto</th>
+                    <th>Fecha y hora</th>
+                </tr>
+            </thead>
+            {% for donacion in page_obj %}
+            <tr>
+                {% if donacion.donador %}
+                <td>{{ donacion.donador.nombre }} {{ donacion.donador.apellido }}</td>
+                {% else %}
+                <td>{{ donacion.email }}</td>
+                {% endif %}
+                <td>{{ donacion.monto }}</td>
+                <td>{{ donacion.fecha }}</td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="4">No hay donaciones registradas en esta colecta</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    {% if mostrar %}
+    <div class="pagination mb-4">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; Primera</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+            {% endif %}
+
+            <span class="current-page">{{ page_obj.number }}</span>
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}¡Oh My Dog! | Mi Información {% endblock %}
+{% block content %}
+<div class="w-75 my-6 mx-auto py-2 px-5 bg-gray-100 rounded">
+    <h1 class="mb-6 text-3xl">Mi información</h1>
+    <p>Apellido: {{ user.apellido }}</p>
+    <p>Nombre: {{ user.nombre }}</p>
+    <p>Email: {{ user.email }}</p>
+    <p>Dirección: {{ user.direccion }}</p>
+    <p>Teléfono: {{ user.telefono }}</p>
+    <a class="btn mr-2" href="{% url 'users:cambiar_info' %}">Actualizar mis datos</a>
+    <a class="btn secondary-color" href="{% url 'users:cambiar_contraseña' %}">Cambiar contraseña</a>
+</div>
+
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Mis turnos{% endblock %}
+{% block content %}
+<div>
+
+    <div class="container">
+        <div class="d-flex justify-content-between">
+            <h3>Mis turnos</h3>
+        </div>
+        <table class="table">
+            <tbody>
+                {% if turnos %}
+                    <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Franja Horaria</th>
+                        <th>Nombre mascota</th>
+                        <th>Motivo Consulta</th>
+                        <th>Estado</th>
+                    </tr>
+                    </thead>
+                    {% for turno in turnos %}
+                        <tr>
+                        <td>{{ turno.Fecha }}</td>
+                        {% if turno.Franja_Horaria == "M" %}
+                            <td>Mañana</td>
+                        {% else %}
+                            <td>Tarde</td>
+                        {% endif %}
+                        
+                        {% if not turno.id_perro %}
+                            <td>Otro perro</td>
+                        {% else %}
+                            <td>{{ turno.id_perro }}</td>
+                        {% endif %}
+
+                        <td>{{ turno.MotivosConsulta }}</td>
+
+                        {% if turno.Pendiente %}
+                            {% if turno.Motivo == '' %}
+                                <td>Aceptado</td>
+                            {% else %}
+                                <td>Rechazado: {{ turno.Motivo }}</td>      
+                            {% endif %}        
+                        {% else %}      
+                            <td>Pendiente</td>
+                        {% endif %}
+
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="4">No posee turnos registrados</td>
+                </tr>
+                {% endif %}
+            </tbody>        
+
+        </table>
+    </div>
+</div>
+{% endblock %}

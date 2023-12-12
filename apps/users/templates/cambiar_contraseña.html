@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}¡Oh My Dog! | Cambiar Contraseña {% endblock %}
+{% block content %}
+<div class="w-50 my-3 mx-auto py-2 px-4 bg-gray-100 rounded">
+    <h1 class="mb-3">Cambiar contraseña</h1>
+    <form action="." method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_old_password" class="inline-block mb-2">Contraseña actual:</label><br>
+            {{ form.old_password }}
+        </div>
+        <div class="mb-3">
+            <label for="id_new_password1" class="inline-block mb-2">Nueva contraseña:</label><br>
+            {{ form.new_password1 }}
+        </div>
+        <div class="mb-3">
+            <label for="id_new_password2" class="inline-block mb-2">Repetir nueva contraseña:</label><br>
+            {{ form.new_password2 }}
+        </div>
+        {% if form.errors or form.non_field_errors %}
+        <div class="mb-3 p-1 bg-danger rounded">
+            {% for field in form %}
+            {{ field.errors }}
+            {% endfor %}
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+        <button class="btn">Aceptar</button>
+        <a href="{{ request.META.HTTP_REFERER }}" class="my-btn">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

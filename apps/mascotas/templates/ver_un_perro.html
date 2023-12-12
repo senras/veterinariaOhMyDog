@@ -1,0 +1,17 @@
+{% extends 'base_template.html' %}
+{% load static %}
+{% block title %}Mascotas{% endblock %}
+{% block content %}
+
+<div class="container mt-5 mb-5">
+    <h2>{{ perro.nombre }}</h2>
+    <p>Raza: {{ perro.raza }}</p>
+    <p>Color: {{ perro.color }}</p>
+    <p>Sexo: {{ perro.sexo }}</p>
+    <p>Castrado: </p>
+    <br>
+    <button class="my-btn text-decoration-none"><a href="{% url 'mascotas:ver_perros' usuario.id %}">Ver sus
+            mascotas</a></button>
+    <button class="my-btn text-decoration-none"><a href="">Agregar mascota</a></button>
+</div>
+{% endblock %}
